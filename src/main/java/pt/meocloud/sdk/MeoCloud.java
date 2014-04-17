@@ -47,6 +47,8 @@ public interface MeoCloud {
 	
 	public MeoCloudResponse<List<Link>> listLinks();
 	
+	public MeoCloudResponse<List<Link>> listUploadLinks();
+	
 	public MeoCloudResponse<Boolean> deleteLink(String linkId);
 	
 	public MeoCloudResponse<ShareLink> shares(String pathName);

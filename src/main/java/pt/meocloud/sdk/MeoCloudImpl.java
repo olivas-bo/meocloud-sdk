@@ -111,6 +111,7 @@ public class MeoCloudImpl implements MeoCloud {
 	public static final String MEOCLOUD_API_METHOD_METADATA = "Metadata";
 	public static final String MEOCLOUD_API_METHOD_METADATA_SHARE = "MetadataShare";
 	public static final String MEOCLOUD_API_METHOD_LIST_LINKS = "ListLinks";
+	public static final String MEOCLOUD_API_METHOD_LIST_UPLOAD_LINKS = "ListUploadLinks";
 	public static final String MEOCLOUD_API_METHOD_DELETE_LINK = "DeleteLink";
 	public static final String MEOCLOUD_API_METHOD_SHARES = "Shares";
 	public static final String MEOCLOUD_API_METHOD_SHARE_FOLDER = "ShareFolder";
@@ -841,6 +842,27 @@ public class MeoCloudImpl implements MeoCloud {
 				meoCloudResponse.setResponse(accountInfo);
 			} else
 				process(meoCloudResponse, response.getCode());
+			return meoCloudResponse;
+		}
+		return null;
+	}
+
+	@Override
+	public MeoCloudResponse<List<Link>> listUploadLinks() {
+		Response response = performRequest(false, MEOCLOUD_API_METHOD_LIST_UPLOAD_LINKS, null, null, Verb.GET, false);
+		if(response != null){
+			String responseBody = getResponseBody(response);
+			log.debug("ListLinks response: {}", responseBody);
+			MeoCloudResponse<List<Link>> meoCloudResponse = new MeoCloudResponse<>();
+			meoCloudResponse.setCode(response.getCode());
+			if(response.getCode() == HttpStatus.SC_OK && responseBody != null){
+				Type listOfLinkType = new TypeToken<List<Link>>(){}.getType();
+				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+				List<Link> links = gson.fromJson(response.getBody(), listOfLinkType);
+				meoCloudResponse.setResponse(links);
+			} else {
+				process(meoCloudResponse, response.getCode());
+			}
 			return meoCloudResponse;
 		}
 		return null;
