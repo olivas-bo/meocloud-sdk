@@ -69,6 +69,7 @@ import pt.meocloud.sdk.data.RequestId;
 import pt.meocloud.sdk.data.ShareLink;
 import pt.meocloud.sdk.data.SharedFolderList;
 import pt.meocloud.sdk.data.Thumbnail;
+import pt.meocloud.sdk.scribe.builder.api.MeoCloudOAuth10;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -189,12 +190,12 @@ public class MeoCloudImpl implements MeoCloud {
 		this.accessSecret = accessSecret;
 		this.apiMode = apiMode;
 		service = new ServiceBuilder()
-		.provider(SapoApi.class)
-		.apiKey(consumerKey)
-		.apiSecret(consumerSecret)
-		.debug()
-		.build();
-		token = new Token(accessToken, accessSecret);
+			.provider(MeoCloudOAuth10.class)
+			.apiKey(consumerKey)
+			.apiSecret(consumerSecret)
+			.debug()
+			.build();
+		token = new Token(this.accessToken, this.accessSecret);
 	}
 	
 	/**
