@@ -114,6 +114,7 @@ public class MeoCloudImpl implements MeoCloud {
 	public static final String MEOCLOUD_API_METHOD_LIST_UPLOAD_LINKS = "ListUploadLinks";
 	public static final String MEOCLOUD_API_METHOD_DELETE_LINK = "DeleteLink";
 	public static final String MEOCLOUD_API_METHOD_SHARES = "Shares";
+	public static final String MEOCLOUD_API_METHOD_UPLOAD_LINK = "UploadLink";
 	public static final String MEOCLOUD_API_METHOD_SHARE_FOLDER = "ShareFolder";
 	public static final String MEOCLOUD_API_METHOD_LIST_SHARED_FOLDERS = "ListSharedFolders";
 	public static final String MEOCLOUD_API_METHOD_THUMBNAILS = "Thumbnails";
@@ -154,6 +155,7 @@ public class MeoCloudImpl implements MeoCloud {
 	public static final String TO_PATH_PARAM = "to_path";
 	public static final String FROM_COPY_REF_PARAM = "from_copy_ref";
 	public static final String PATH_PARAM = "path";
+	public static final String TTL_PARAM = "ttl";
 	/**
 	 * Thumbnail formats
 	 * */
@@ -863,6 +865,25 @@ public class MeoCloudImpl implements MeoCloud {
 			} else {
 				process(meoCloudResponse, response.getCode());
 			}
+			return meoCloudResponse;
+		}
+		return null;
+	}
+
+	@Override
+	public MeoCloudResponse<ShareLink> uploadLink(String pathName, Long linkTtl) {
+		List<NameValuePair> parameters = new ArrayList<>();
+		if(linkTtl != null)
+			parameters.add(new BasicNameValuePair(TTL_PARAM, linkTtl.toString()));
+		Response response = performRequest(false, MEOCLOUD_API_METHOD_SHARE_FOLDER, pathName, parameters, Verb.POST, true);
+		if(response != null){
+			MeoCloudResponse<ShareLink> meoCloudResponse = new MeoCloudResponse<>();
+			meoCloudResponse.setCode(response.getCode());
+			String responseBody = getResponseBody(response);
+			if(response.getCode() == HttpStatus.SC_OK && responseBody != null)
+				meoCloudResponse.setResponse(ShareLink.fromJson(responseBody, ShareLink.class));
+			else
+				process(meoCloudResponse, response.getCode());
 			return meoCloudResponse;
 		}
 		return null;

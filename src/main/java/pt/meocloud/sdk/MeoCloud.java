@@ -52,6 +52,8 @@ public interface MeoCloud {
 	public MeoCloudResponse<Boolean> deleteLink(String linkId);
 	
 	public MeoCloudResponse<ShareLink> shares(String pathName);
+	
+	public MeoCloudResponse<ShareLink> uploadLink(String pathName, Long linkTtl);
 
 	public MeoCloudResponse<RequestId> shareFolder(String pathName, String email);
 	
