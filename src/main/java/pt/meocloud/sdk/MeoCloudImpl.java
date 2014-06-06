@@ -61,6 +61,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.meocloud.sdk.data.AccountInfo;
 import pt.meocloud.sdk.data.CopyRef;
+import pt.meocloud.sdk.data.Empty;
 import pt.meocloud.sdk.data.Link;
 import pt.meocloud.sdk.data.MediaLink;
 import pt.meocloud.sdk.data.MeoCloudResponse;
@@ -888,8 +889,26 @@ public class MeoCloudImpl implements MeoCloud {
 		}
 		return null;
 	}
-	
-	
-	
+
+	@Override
+	public MeoCloudResponse<Empty> setLinkTtl(Long linkTtl, String linkId) {
+		List<NameValuePair> parameters = new ArrayList<>();
+		if(linkTtl != null)
+			parameters.add(new BasicNameValuePair(TTL_PARAM, linkTtl.toString()));
+		if(linkId != null)
+			parameters.add(new BasicNameValuePair(SHARE_ID_PARAM, linkId));
+		Response response = performRequest(false, MEOCLOUD_API_METHOD_SHARE_FOLDER, null, parameters, Verb.POST, true);
+		if(response != null){
+			MeoCloudResponse<Empty> meoCloudResponse = new MeoCloudResponse<>();
+			meoCloudResponse.setCode(response.getCode());
+			String responseBody = getResponseBody(response);
+			if(response.getCode() == HttpStatus.SC_OK && responseBody != null)
+				meoCloudResponse.setResponse(Empty.fromJson(responseBody, Empty.class));
+			else
+				process(meoCloudResponse, response.getCode());
+			return meoCloudResponse;
+		}
+		return null;
+	}
 
 }

@@ -30,6 +30,7 @@ import java.util.List;
 
 import pt.meocloud.sdk.data.AccountInfo;
 import pt.meocloud.sdk.data.CopyRef;
+import pt.meocloud.sdk.data.Empty;
 import pt.meocloud.sdk.data.Link;
 import pt.meocloud.sdk.data.MediaLink;
 import pt.meocloud.sdk.data.MeoCloudResponse;
@@ -54,6 +55,8 @@ public interface MeoCloud {
 	public MeoCloudResponse<ShareLink> shares(String pathName);
 	
 	public MeoCloudResponse<ShareLink> uploadLink(String pathName, Long linkTtl);
+	
+	public MeoCloudResponse<Empty> setLinkTtl(Long linkTtl, String linkId); 
 
 	public MeoCloudResponse<RequestId> shareFolder(String pathName, String email);
 	
